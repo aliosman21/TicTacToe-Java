@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button layoutX="493.0" layoutY="220.0" mnemonicParsing="false" text="Single Player" />
+      <Button layoutX="495.0" layoutY="260.0" mnemonicParsing="false" text="Two Players" />
+      <Button layoutX="495.0" layoutY="300.0" mnemonicParsing="false" text="LAN" />
+      <Button layoutX="495.0" layoutY="339.0" mnemonicParsing="false" text="Replay" />
+   </children>
+</AnchorPane>
