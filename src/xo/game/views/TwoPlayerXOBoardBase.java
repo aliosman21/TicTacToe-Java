@@ -4,6 +4,7 @@ import xo.game.dataTypes.Moves;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Random;
 import javafx.animation.KeyFrame;
 import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
@@ -19,6 +20,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -28,9 +31,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
+import xo.game.controller.SinglePlayerController;
 
-import xo.game.TwoPlayerController;
-import xo.game.XOGame;
+import xo.game.controller.TwoPlayerController;
+import xo.game.controller.XOGame;
 
 public class TwoPlayerXOBoardBase extends GridPane {
 
@@ -69,9 +73,9 @@ public class TwoPlayerXOBoardBase extends GridPane {
         rowConstraints = new RowConstraints();
         rowConstraints0 = new RowConstraints();
         rowConstraints1 = new RowConstraints();
-        setHgap(20.0);
-        setVgap(20.0);
-        setStyle("-fx-background-color: #9a0000 ; -fx-background-radius:10px");
+        setHgap(10.0);
+        setVgap(10.0);
+        setStyle(" -fx-background-color:#efefef ; ; -fx-background-radius:10px");
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -365,10 +369,24 @@ public class TwoPlayerXOBoardBase extends GridPane {
     private void Ending(Moves move) {
         Text text = new Text();
         endGameText = text;
-        text.setFont(new Font("forte", 75));
+        text.setFont(new Font("forte", 100));
         text.setFill(Color.WHITE);
         text.setStroke(Color.BLACK);
         text.setRotate(180);
+        Image redBalloonImage = new Image(getClass().getResource("/xo/game/resources/redBalloon.png").toExternalForm());
+        ImageView redBalloon = new ImageView(redBalloonImage);
+        redBalloon.setFitHeight(100);
+        redBalloon.setFitWidth(50);
+        //--------------------------------------------------------------------------------------------------------------------
+        Image greenBalloonImage = new Image(getClass().getResource("/xo/game/resources/greenBalloon.png").toExternalForm());
+        ImageView greenBalloon = new ImageView(greenBalloonImage);
+        greenBalloon.setFitHeight(100);
+        greenBalloon.setFitWidth(50);
+        //--------------------------------------------------------------------------------------------------------------------
+        Image blueBalloonImage = new Image(getClass().getResource("/xo/game/resources/blueBalloon.png").toExternalForm());
+        ImageView blueBalloon = new ImageView(blueBalloonImage);
+        blueBalloon.setFitHeight(100);
+        blueBalloon.setFitWidth(50);
         disableAllButtons();
 
         switch (move.getFinalState()) {
@@ -389,24 +407,44 @@ public class TwoPlayerXOBoardBase extends GridPane {
                 Platform.runLater(timelineDraw::play);
                 break;
             case 1:
+                Media soundEffect = new Media(getClass().getResource("/xo/game/resources/victorySoundEffect.mp3").toExternalForm());
+                MediaPlayer soundEffectPlayer = new MediaPlayer(soundEffect);
+
                 final KeyFrame textAnimationWin = new KeyFrame(Duration.seconds(0), e -> {
                     text.setText("Player 1 Win");
 
                     SequentialTransition sequentialTransition = new SequentialTransition(text, translateEndText(text), rotateEndText(text));
                     sequentialTransition.play();
                     this.getChildren().addAll(text);
+
                 });
-                final KeyFrame alertfunctionCallWin = new KeyFrame(Duration.seconds(5), e -> {
+                final KeyFrame videoWin = new KeyFrame(Duration.seconds(2), e -> {
+
+                    SequentialTransition redBalloonTransition = new SequentialTransition(redBalloon, translateImg(redBalloon));
+                    SequentialTransition blueBalloonTransition = new SequentialTransition(blueBalloon, translateImg(blueBalloon));
+                    SequentialTransition greenBalloonTransition = new SequentialTransition(greenBalloon, translateImg(greenBalloon));
+                    greenBalloonTransition.play();
+                    blueBalloonTransition.play();
+                    redBalloonTransition.play();
+                    this.getChildren().addAll(redBalloon, greenBalloon, blueBalloon);
+                    soundEffectPlayer.play();
+                });
+                final KeyFrame alertfunctionCallWin = new KeyFrame(Duration.seconds(4), e -> {
                     Platform.runLater(() -> {
+                        this.getChildren().remove(redBalloon);
+                        this.getChildren().remove(blueBalloon);
+                        this.getChildren().remove(greenBalloon);
+                        //     mediaPlayer.stop();
                         saveGame();
                     });
                 });
-                final Timeline timelineWin = new Timeline(textAnimationWin, alertfunctionCallWin);
+                final Timeline timelineWin = new Timeline(textAnimationWin, videoWin, alertfunctionCallWin);
                 Platform.runLater(timelineWin::play);
                 break;
+
             case -1:
                 final KeyFrame textAnimationLose = new KeyFrame(Duration.seconds(0), e -> {
-                    text.setText("Player 2 Win");
+                    text.setText("Player 1 Lose");
 
                     SequentialTransition sequentialTransition = new SequentialTransition(text, translateEndText(text), rotateEndText(text));
                     sequentialTransition.play();
@@ -423,12 +461,26 @@ public class TwoPlayerXOBoardBase extends GridPane {
             default:
                 break;
         }
+    }
 
+    private TranslateTransition translateImg(ImageView imageView) {
+
+        Random randomNumberGenerator = new Random();
+        int randomStartX = randomNumberGenerator.nextInt(500) + 50;
+        TranslateTransition translateTransition = new TranslateTransition();
+        translateTransition.setDuration(Duration.seconds(2));
+        translateTransition.setNode(imageView);
+        translateTransition.setFromX(randomStartX);
+        translateTransition.setFromY(600);
+        translateTransition.setToY(-200);
+        translateTransition.setAutoReverse(true);
+
+        return translateTransition;
     }
 
     private TranslateTransition translateEndText(Text text) {
         TranslateTransition translateTransition = new TranslateTransition();
-        translateTransition.setDuration(Duration.seconds(1.5));
+        translateTransition.setDuration(Duration.seconds(0.5));
         translateTransition.setNode(text);
         translateTransition.setByY(220);
         translateTransition.setByX(70);
@@ -457,13 +509,13 @@ public class TwoPlayerXOBoardBase extends GridPane {
             ButtonType yesBtn = new ButtonType("Yes");
             ButtonType noBtn = new ButtonType("No");
 
-            Image image = new Image(getClass().getResource("toe.png").toExternalForm());
+            Image image = new Image(getClass().getResource("/xo/game/resources/tac.gif").toExternalForm());
             ImageView imageView = new ImageView(image);
             imageView.setFitWidth(80);
             imageView.setFitHeight(80);
             alert.setGraphic(imageView);
 
-            alert.getDialogPane().setStyle("-fx-background-color:  cornsilk");
+            alert.getDialogPane().setStyle("-fx-background-color:linear-gradient(darkviolet,pink)");
 
             alert.getButtonTypes().setAll(yesBtn, noBtn);
             Window window = alert.getDialogPane().getScene().getWindow();
@@ -473,8 +525,7 @@ public class TwoPlayerXOBoardBase extends GridPane {
 
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == yesBtn) {
-                //will send array of moves from abstract controller to be saved
-                //with game state
+                TwoPlayerController.getInstance().toDB("twoPlayer");
                 PlayAgain();
             } else if (result.get() == noBtn) {
                 //will do nothing
@@ -495,14 +546,13 @@ public class TwoPlayerXOBoardBase extends GridPane {
             ButtonType playAgainBtn = new ButtonType("Play Again");
             ButtonType mainMenuBtn = new ButtonType("Main Menu");
 
-            Image image = new Image(getClass().getResource("toe.png").toExternalForm());
+            Image image = new Image(getClass().getResource("/xo/game/resources/tac.gif").toExternalForm());
             ImageView imageView = new ImageView(image);
             imageView.setFitWidth(80);
             imageView.setFitHeight(80);
             alert.setGraphic(imageView);
 
-            alert.getDialogPane().setStyle("-fx-background-color:  cornsilk");
-
+            alert.getDialogPane().setStyle("-fx-background-color:linear-gradient(darkviolet,pink)");
             alert.getButtonTypes().setAll(playAgainBtn, mainMenuBtn);
             Window window = alert.getDialogPane().getScene().getWindow();
             window.setOnCloseRequest(event -> {
@@ -528,7 +578,7 @@ public class TwoPlayerXOBoardBase extends GridPane {
         for (Button[] row : btns) {
             for (Button column : row) {
                 column.setDisable(true);
-                column.setStyle("-fx-background-color:  grey");
+                column.setStyle("-fx-background-color:  #4d194d");
 
             }
         }
@@ -538,7 +588,7 @@ public class TwoPlayerXOBoardBase extends GridPane {
         for (Button[] row : btns) {
             for (Button column : row) {
                 column.setDisable(false);
-                column.setStyle("-fx-background-color:  cornsilk");
+                column.setStyle("-fx-background-color:  lightskyblue");
 
             }
         }
@@ -546,6 +596,7 @@ public class TwoPlayerXOBoardBase extends GridPane {
 
     private void Reset() {
         this.getChildren().remove(endGameText);
+        endGameText = null;
         TwoPlayerController.getInstance().reset();
         System.out.println("Reset function called");
         for (Button[] row : btns) {
@@ -571,13 +622,13 @@ public class TwoPlayerXOBoardBase extends GridPane {
     public void init(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.player = true;
-        Stop[] stops = new Stop[]{new Stop(0, Color.BLACK), new Stop(1, Color.RED)};
+        Stop[] stops = new Stop[]{new Stop(0, Color.LIGHTBLUE), new Stop(1, Color.PURPLE)};
         LinearGradient lg1 = new LinearGradient(0, 0, 0, 0.5, true, CycleMethod.REFLECT, stops);
         for (Button[] row : btns) {
             for (Button column : row) {
                 column.setTextFill(lg1);
                 column.setFont(new Font("Forte", 90.0));
-                column.setStyle("-fx-background-color:  cornsilk");
+                column.setStyle("-fx-background-color: lightskyblue");
 
             }
         }

@@ -15,8 +15,9 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import xo.game.SinglePlayerController;
-import xo.game.XOGame;
+import xo.game.controller.ReplayController;
+import xo.game.controller.SinglePlayerController;
+import xo.game.controller.XOGame;
 import xo.game.dataTypes.GamesHolder;
 
 public class ReplayTableViewBase extends AnchorPane {
@@ -64,16 +65,22 @@ public class ReplayTableViewBase extends AnchorPane {
         getChildren().add(backButton);
 
         gamesTable.setRowFactory(tv -> {
+
             TableRow<GamesHolder> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY
                         && event.getClickCount() == 2) {
 
                     GamesHolder clickedRow = row.getItem();
-                    System.out.println(clickedRow.getGameID());
+                    //  System.out.println(clickedRow.getGameID());
+                    ReplayController.getInstance().getMovesFromDb(clickedRow.getGameID());
+                    ReplayController.getInstance().oneByOne();
+                    //ReplayXOBoardBase.getInstance().replay(ReplayController.getInstance().getMovesFromDb(clickedRow.getGameID()));
                     //i want to kill myself again
                 }
+
             });
+
             return row;
         });
     }
@@ -84,6 +91,7 @@ public class ReplayTableViewBase extends AnchorPane {
 
     public void populateTable(GamesHolder[] games) {
 //I want to kill myself right now
+        gamesTable.getItems().clear();
         idColumn.setCellValueFactory(new PropertyValueFactory<>("gameID"));
 
         gameTypeColumn.setCellValueFactory(new PropertyValueFactory<>("gameType"));

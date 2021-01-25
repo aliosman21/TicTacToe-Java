@@ -25,6 +25,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -34,8 +35,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
-import xo.game.SinglePlayerController;
-import xo.game.XOGame;
+import xo.game.controller.ReplayController;
+import xo.game.controller.SinglePlayerController;
+import xo.game.controller.XOGame;
 
 public class ReplayXOBoardBase extends GridPane {
 
@@ -64,7 +66,7 @@ public class ReplayXOBoardBase extends GridPane {
     //-1------------> the button has an O or is played by player 2
     //===========================================================================
     protected int[][] gameState = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
-    protected Button[][] btns = {
+    public Button[][] btns = {
         {r0c0, r0c1, r0c2},
         {r1c0, r1c1, r1c2},
         {r2c0, r2c1, r2c2}
@@ -85,9 +87,9 @@ public class ReplayXOBoardBase extends GridPane {
         setMinWidth(USE_PREF_SIZE);
         setPrefHeight(600.0);
         setPrefWidth(600.0);
-        setHgap(20.0);
-        setVgap(20.0);
-        setStyle("-fx-background-color: red ; -fx-background-radius:10px");
+        setHgap(10.0);
+        setVgap(10.0);
+        setStyle("-fx-background-color:#efefef ; -fx-background-radius:10px");
 
         columnConstraints.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
         columnConstraints.setMinWidth(10.0);
@@ -209,7 +211,7 @@ public class ReplayXOBoardBase extends GridPane {
                 });
                 final KeyFrame alertfunctionCallDraw = new KeyFrame(Duration.seconds(5), e -> {
                     Platform.runLater(() -> {
-                        PlayAgain();
+                        endReplay();
                     });
                 });
                 final Timeline timelineDraw = new Timeline(textAnimationDraw, alertfunctionCallDraw);
@@ -225,7 +227,7 @@ public class ReplayXOBoardBase extends GridPane {
                 });
                 final KeyFrame alertfunctionCallWin = new KeyFrame(Duration.seconds(5), e -> {
                     Platform.runLater(() -> {
-                        PlayAgain();
+                        endReplay();
                     });
                 });
                 final Timeline timelineWin = new Timeline(textAnimationWin, alertfunctionCallWin);
@@ -241,7 +243,7 @@ public class ReplayXOBoardBase extends GridPane {
                 });
                 final KeyFrame alertfunctionCallLose = new KeyFrame(Duration.seconds(5), e -> {
                     Platform.runLater(() -> {
-                        PlayAgain();
+                        endReplay();
                     });
                 });
                 final Timeline timelineLose = new Timeline(textAnimationLose, alertfunctionCallLose);
@@ -275,40 +277,10 @@ public class ReplayXOBoardBase extends GridPane {
         return rotateTransition;
     }
 
-    private void PlayAgain() {
-        try {
-            Alert alert = new Alert(AlertType.NONE);
-            alert.setTitle("Play Again");
-            alert.setContentText("Choose your option.");
-
-            ButtonType playAgainBtn = new ButtonType("Watch Again");
-            ButtonType mainMenuBtn = new ButtonType("Main Menu");
-
-            Image image = new Image(getClass().getResource("toe.png").toExternalForm());
-            ImageView imageView = new ImageView(image);
-            imageView.setFitWidth(80);
-            imageView.setFitHeight(80);
-            alert.setGraphic(imageView);
-
-            alert.getDialogPane().setStyle("-fx-background-color:  cornsilk");
-
-            alert.getButtonTypes().setAll(playAgainBtn, mainMenuBtn);
-            Window window = alert.getDialogPane().getScene().getWindow();
-            window.setOnCloseRequest(event -> {
-                window.hide();
-            });
-
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == playAgainBtn) {
-                enableAllButtons();
-                Reset();
-            } else if (result.get() == mainMenuBtn) {
-                Reset();
-                primaryStage.setScene(XOGame.mainMenuScene);
-            }
-        } catch (NoSuchElementException e) {
-            System.exit(0);
-        }
+    private void endReplay() {
+        this.getChildren().remove(endGameText);
+        Reset();
+        primaryStage.setScene(XOGame.mainMenuScene);
 
     }
 
@@ -333,8 +305,8 @@ public class ReplayXOBoardBase extends GridPane {
     }
 
     private void Reset() {
-        this.getChildren().remove(endGameText);
-        SinglePlayerController.getInstance().reset();
+
+        ReplayController.getInstance().reset();
         System.out.println("Reset function called");
         for (Button[] row : btns) {
             for (Button column : row) {
@@ -359,15 +331,54 @@ public class ReplayXOBoardBase extends GridPane {
     public void init(Stage primaryStage) {
         this.primaryStage = primaryStage;
         enableAllButtons();
-        Stop[] stops = new Stop[]{new Stop(0, Color.BLACK), new Stop(1, Color.RED)};
+        Stop[] stops = new Stop[]{new Stop(0, Color.PLUM), new Stop(1, Color.DARKMAGENTA)};
         LinearGradient lg1 = new LinearGradient(0, 0, 0, 0.5, true, CycleMethod.REFLECT, stops);
         for (Button[] row : btns) {
             for (Button column : row) {
                 column.setTextFill(lg1);
                 column.setFont(new Font("Forte", 90.0));
-                column.setStyle("-fx-background-color:  cornsilk");
+                column.setStyle("-fx-background-color:lightskyblue");
 
             }
+        }
+    }
+
+//    public void replay(Moves[] m){
+//        for(Moves move:m){
+//            if (move.isPlayer()){
+//                btns[move.getX()][move.getY()].setText("x");
+//                btns[move.getX()][move.getY()].setStyle("-fx-background-color: #03DAC6; -fx-text-fill:black ;-fx-background-radius:7px");
+//            }
+//            else{
+//                System.out.println(move.getX()+move.getY()+"\n");
+//                btns[move.getX()][move.getY()].setText("o");
+//                btns[move.getX()][move.getY()].setStyle("-fx-background-color: #FF0266; -fx-text-fill:black ;-fx-background-radius:7px");
+//            }
+//        }
+//    }
+    public void draw(Moves move) {
+
+        try {
+            Platform.runLater(() -> {
+                if (move.isPlayer()) {
+                    btns[move.getX()][move.getY()].setText("x");
+                    gameState[move.getX()][move.getY()] = 1;
+                    btns[move.getX()][move.getY()].setStyle("-fx-background-color: #03DAC6; -fx-text-fill:black ;-fx-background-radius:7px");
+                } else {
+                    // System.out.println(move.getX() + move.getY() + "\n");
+                    gameState[move.getX()][move.getY()] = -1;
+                    btns[move.getX()][move.getY()].setText("o");
+                    btns[move.getX()][move.getY()].setStyle("-fx-background-color: #FF0266; -fx-text-fill:black ;-fx-background-radius:7px");
+                }
+                System.out.println("Step is " + move.getStep() + " Final State is " + move.getFinalState());
+                if (move.getFinalState() != 10) {
+
+                    Ending(move);
+                }
+            });
+
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
 

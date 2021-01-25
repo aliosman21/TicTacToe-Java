@@ -1,0 +1,58 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jan 6, 2021, 1:14:10 AM
+    Author     : raghda
+*/
+.bodybg{
+   -fx-background-image: url("backgroundTicTacToeGif.gif");
+    -fx-background-size: 500px;
+   -fx-background-position: 100 20 ;
+   -fx-background-color:linear-gradient(darkviolet,pink);
+   -fx-background-repeat: no-repeat;
+  
+ 
+ }
+ .button1{
+      -fx-background-image: url("singleplayerIcon.png");
+      -fx-background-color:lightskyblue;
+  -fx-background-size: 30px 30px ;
+  -fx-background-position: 10 5px;
+  -fx-background-repeat: no-repeat;
+
+     
+ }
+ .button2{
+      
+   -fx-background-image: url("2PlayersIcon.png");
+ -fx-background-position: 10 5px;
+  -fx-background-size: 30px 30px ;
+        -fx-background-color:#ffbf00;
+
+  -fx-background-repeat: no-repeat;
+
+ }
+ 
+ .button3{
+      
+  -fx-background-image: url("lanIcon.png");
+   -fx-background-repeat: no-repeat;
+   -fx-background-color:#884EA0 ;
+
+  -fx-background-position: 10 5px;
+  -fx-background-size: 30px 30px ;
+
+ }
+ .button4{
+     
+     -fx-background-image: url("replayIcon.png");
+  -fx-background-size: 30px 30px ;
+        -fx-background-color:#F06114;
+
+   -fx-background-position: 10 5px;
+    -fx-background-repeat: no-repeat;
+ }
+ 

@@ -8,8 +8,8 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import xo.game.LanController;
-import xo.game.XOGame;
+import xo.game.controller.LanController;
+import xo.game.controller.XOGame;
 
 public class LanGameType extends AnchorPane {
 
@@ -20,7 +20,6 @@ public class LanGameType extends AnchorPane {
     protected final DropShadow dropShadow0;
     protected final Button back;
     protected final DropShadow dropShadow1;
-    protected final Label label;
     protected final DropShadow dropShadow3;
     private static LanGameType lanSelectionMenu;
     public static Scene lanSelectionMenuScene = new Scene(lanSelectionMenu.getInstance(), 600, 600);
@@ -33,14 +32,13 @@ public class LanGameType extends AnchorPane {
         dropShadow0 = new DropShadow();
         back = new Button();
         dropShadow1 = new DropShadow();
-        label = new Label();
         dropShadow3 = new DropShadow();
 
         setId("AnchorPane");
         setPrefHeight(600.0);
         setPrefWidth(600.0);
         getStyleClass().add("bodybg");
-        getStylesheets().add("/xo/game/views/main.css");
+        getStylesheets().add("/xo/game/resources/main.css");
 
         host.setAlignment(javafx.geometry.Pos.CENTER);
         host.setLayoutX(94.0);
@@ -48,12 +46,13 @@ public class LanGameType extends AnchorPane {
         host.setMnemonicParsing(false);
         host.setPrefHeight(41.0);
         host.setPrefWidth(417.0);
-        host.getStylesheets().add("/xo/game/views/main.css");
+        host.getStylesheets().add("/xo/game/resources/main.css");
         host.setText("Host a Game");
         host.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         host.setTextFill(javafx.scene.paint.Color.valueOf("#b50b0b"));
         host.setTextOverrun(javafx.scene.control.OverrunStyle.CLIP);
-        host.setFont(new Font(18.0));
+        host.setStyle("-fx-background-color:lightskyblue ");
+        host.setFont(new Font("System Bold Italic", 21.0));
 
         dropShadow.setColor(javafx.scene.paint.Color.RED);
         dropShadow.setHeight(40.0);
@@ -68,11 +67,11 @@ public class LanGameType extends AnchorPane {
         join.setMnemonicParsing(false);
         join.setPrefHeight(41.0);
         join.setPrefWidth(417.0);
-        join.getStylesheets().add("/xo/game/views/main.css");
+        join.getStylesheets().add("/xo/game/resources/main.css");
         join.setText("Join a Game");
         join.setTextFill(javafx.scene.paint.Color.valueOf("#b50b0b"));
-        join.setFont(new Font(18.0));
-
+        join.setStyle("-fx-background-color:#ffbf00 ");
+        join.setFont(new Font("System Bold Italic", 21.0));;
         dropShadow0.setColor(javafx.scene.paint.Color.RED);
         dropShadow0.setHeight(40.0);
         dropShadow0.setRadius(19.5);
@@ -86,10 +85,10 @@ public class LanGameType extends AnchorPane {
         back.setMnemonicParsing(false);
         back.setPrefHeight(41.0);
         back.setPrefWidth(417.0);
-        back.getStylesheets().add("/xo/game/views/main.css");
+        back.getStylesheets().add("/xo/game/resources/main.css");
         back.setText("Main Menu");
-        back.setTextFill(javafx.scene.paint.Color.valueOf("#b50b0b"));
-        back.setFont(new Font(18.0));
+        back.setFont(new Font("System Bold Italic", 21.0));
+        back.setStyle("-fx-background-color:#884EA0 ");
 
         dropShadow1.setColor(javafx.scene.paint.Color.RED);
         dropShadow1.setHeight(40.0);
@@ -98,24 +97,11 @@ public class LanGameType extends AnchorPane {
         dropShadow1.setWidth(40.0);
         back.setEffect(dropShadow1);
 
-        label.setAlignment(javafx.geometry.Pos.CENTER);
-        label.setLayoutX(102.0);
-        label.setLayoutY(21.0);
-        label.setPrefHeight(72.0);
-        label.setPrefWidth(402.0);
-        label.getStyleClass().add("title");
-        label.getStylesheets().add("/xo/game/views/main.css");
-        label.setText("Tic Tac Toe");
-        label.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        label.setTextFill(javafx.scene.paint.Color.valueOf("#b50b0b"));
-        label.setFont(new Font("Bell MT", 70.0));
-
         dropShadow3.setColor(javafx.scene.paint.Color.RED);
         dropShadow3.setHeight(50.65);
         dropShadow3.setRadius(19.8825);
         dropShadow3.setSpread(0.17);
         dropShadow3.setWidth(30.88);
-        label.setEffect(dropShadow3);
 
         host.setOnAction((ActionEvent event) -> {
             LanController.getInstance().hostGame(primaryStage);
@@ -137,7 +123,6 @@ public class LanGameType extends AnchorPane {
                 .add(join);
         getChildren()
                 .add(back);
-        getChildren().add(label);
 
     }
 

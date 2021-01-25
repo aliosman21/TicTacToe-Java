@@ -5,6 +5,7 @@ import xo.game.dataTypes.Moves;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Random;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.RotateTransition;
@@ -34,8 +35,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
-import xo.game.SinglePlayerController;
-import xo.game.XOGame;
+import xo.game.controller.SinglePlayerController;
+import xo.game.controller.XOGame;
 
 public class SinglePlayerXOBoardBase extends GridPane {
 
@@ -85,9 +86,9 @@ public class SinglePlayerXOBoardBase extends GridPane {
         setMinWidth(USE_PREF_SIZE);
         setPrefHeight(600.0);
         setPrefWidth(600.0);
-        setHgap(20.0);
-        setVgap(20.0);
-        setStyle("-fx-background-color: #9a0000 ; -fx-background-radius:10px");
+        setHgap(10.0);
+        setVgap(10.0);
+        setStyle("-fx-background-color:#efefef ; -fx-background-radius:10px");
 
         columnConstraints.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
         columnConstraints.setMinWidth(10.0);
@@ -325,10 +326,20 @@ public class SinglePlayerXOBoardBase extends GridPane {
         text.setFill(Color.WHITE);
         text.setStroke(Color.BLACK);
         text.setRotate(180);
-        Image image = new Image(getClass().getResource("r.jpg").toExternalForm());
-        ImageView imageView = new ImageView(image);
-        imageView.setFitHeight(100);
-        imageView.setFitWidth(100);
+        Image redBalloonImage = new Image(getClass().getResource("/xo/game/resources/redBalloon.png").toExternalForm());
+        ImageView redBalloon = new ImageView(redBalloonImage);
+        redBalloon.setFitHeight(100);
+        redBalloon.setFitWidth(50);
+        //--------------------------------------------------------------------------------------------------------------------
+        Image greenBalloonImage = new Image(getClass().getResource("/xo/game/resources/greenBalloon.png").toExternalForm());
+        ImageView greenBalloon = new ImageView(greenBalloonImage);
+        greenBalloon.setFitHeight(100);
+        greenBalloon.setFitWidth(50);
+        //--------------------------------------------------------------------------------------------------------------------
+        Image blueBalloonImage = new Image(getClass().getResource("/xo/game/resources/blueBalloon.png").toExternalForm());
+        ImageView blueBalloon = new ImageView(blueBalloonImage);
+        blueBalloon.setFitHeight(100);
+        blueBalloon.setFitWidth(50);
         disableAllButtons();
 
         switch (move.getFinalState()) {
@@ -349,22 +360,9 @@ public class SinglePlayerXOBoardBase extends GridPane {
                 Platform.runLater(timelineDraw::play);
                 break;
             case 1:
-                Media media = new Media(getClass().getResource("tt.mp4").toExternalForm());
-                MediaPlayer mediaPlayer = new MediaPlayer(media);
-                MediaView mediaView = new MediaView(mediaPlayer);
-                mediaPlayer.setOnEndOfMedia(() -> {
-                    System.out.println("Done.");
-                });
-                mediaPlayer.setOnStopped(() -> {
-                    mediaView.setVisible(false);
-                });
+                Media soundEffect = new Media(getClass().getResource("/xo/game/resources/victorySoundEffect.mp3").toExternalForm());
+                MediaPlayer soundEffectPlayer = new MediaPlayer(soundEffect);
 
-                mediaPlayer.setOnStalled(() -> {
-                    System.out.println("JHE");
-                });
-                mediaPlayer.setOnPlaying(() -> {
-                    System.out.println("cru");
-                });
                 final KeyFrame textAnimationWin = new KeyFrame(Duration.seconds(0), e -> {
                     text.setText("You Win");
 
@@ -376,25 +374,22 @@ public class SinglePlayerXOBoardBase extends GridPane {
 
                 final KeyFrame videoWin = new KeyFrame(Duration.seconds(2), e -> {
 
-                    //Image image = new Image(getClass().getResource("r.jpg").toExternalForm());
-                    //ImageView imageView = new ImageView(image);
-                    SequentialTransition sequentialTransition = new SequentialTransition(imageView, translateImg(imageView));
-                    sequentialTransition.play();
-                    this.getChildren().addAll(imageView);
-
-                    mediaView.setTranslateX(50);
-                    mediaView.setTranslateY(200);
-                    mediaView.setFitHeight(500);
-                    mediaView.setFitWidth(500);
-                    this.getChildren().addAll(mediaView);
-                    mediaPlayer.play();
-
+                    SequentialTransition redBalloonTransition = new SequentialTransition(redBalloon, translateImg(redBalloon));
+                    SequentialTransition blueBalloonTransition = new SequentialTransition(blueBalloon, translateImg(blueBalloon));
+                    SequentialTransition greenBalloonTransition = new SequentialTransition(greenBalloon, translateImg(greenBalloon));
+                    greenBalloonTransition.play();
+                    blueBalloonTransition.play();
+                    redBalloonTransition.play();
+                    this.getChildren().addAll(redBalloon, greenBalloon, blueBalloon);
+                    soundEffectPlayer.play();
                 });
 
                 final KeyFrame alertfunctionCallWin = new KeyFrame(Duration.seconds(4), e -> {
                     Platform.runLater(() -> {
-                        this.getChildren().remove(imageView);
-                        mediaPlayer.stop();
+                        this.getChildren().remove(redBalloon);
+                        this.getChildren().remove(blueBalloon);
+                        this.getChildren().remove(greenBalloon);
+                        //     mediaPlayer.stop();
                         saveGame();
                     });
                 });
@@ -424,12 +419,15 @@ public class SinglePlayerXOBoardBase extends GridPane {
     }
 
     private TranslateTransition translateImg(ImageView imageView) {
+
+        Random randomNumberGenerator = new Random();
+        int randomStartX = randomNumberGenerator.nextInt(500) + 50;
         TranslateTransition translateTransition = new TranslateTransition();
-        translateTransition.setDuration(Duration.seconds(1));
+        translateTransition.setDuration(Duration.seconds(2));
         translateTransition.setNode(imageView);
-        translateTransition.setFromX(50);
+        translateTransition.setFromX(randomStartX);
         translateTransition.setFromY(600);
-        translateTransition.setToY(0);
+        translateTransition.setToY(-200);
         translateTransition.setAutoReverse(true);
 
         return translateTransition;
@@ -466,12 +464,12 @@ public class SinglePlayerXOBoardBase extends GridPane {
             ButtonType yesBtn = new ButtonType("Yes");
             ButtonType noBtn = new ButtonType("No");
 
-            Image image = new Image(getClass().getResource("toe.png").toExternalForm());
+            Image image = new Image(getClass().getResource("/xo/game/resources/tac.gif").toExternalForm());
             ImageView imageView = new ImageView(image);
             imageView.setFitWidth(80);
             imageView.setFitHeight(80);
             alert.setGraphic(imageView);
-            alert.getDialogPane().setStyle("-fx-background-color:  cornsilk");
+            alert.getDialogPane().setStyle("-fx-background-color:linear-gradient(pink,darkviolet)");
 
             alert.getButtonTypes().setAll(yesBtn, noBtn);
             Window window = alert.getDialogPane().getScene().getWindow();
@@ -482,9 +480,7 @@ public class SinglePlayerXOBoardBase extends GridPane {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == yesBtn) {
 
-                SinglePlayerController.getInstance().testing();
-                //will send array of moves from abstract controller to be saved
-                //with game state
+                SinglePlayerController.getInstance().toDB("singlePlayer");
                 PlayAgain();
             } else if (result.get() == noBtn) {
                 //will do nothing
@@ -505,14 +501,14 @@ public class SinglePlayerXOBoardBase extends GridPane {
             ButtonType playAgainBtn = new ButtonType("Play Again");
             ButtonType mainMenuBtn = new ButtonType("Main Menu");
 
-            Image image = new Image(getClass().getResource("toe.png").toExternalForm());
+            Image image = new Image(getClass().getResource("/xo/game/resources/tac.gif").toExternalForm());
             ImageView imageView = new ImageView(image);
             imageView.setFitWidth(80);
             imageView.setFitHeight(80);
             alert.setGraphic(imageView);
             //String path = "/JAVA/XO Game/src/xo/game/views/t2.mp4";
 
-            alert.getDialogPane().setStyle("-fx-background-color:  cornsilk");
+            alert.getDialogPane().setStyle("-fx-background-color:linear-gradient(darkviolet,pink)");
 
             alert.getButtonTypes().setAll(playAgainBtn, mainMenuBtn);
             Window window = alert.getDialogPane().getScene().getWindow();
@@ -538,8 +534,7 @@ public class SinglePlayerXOBoardBase extends GridPane {
         for (Button[] row : btns) {
             for (Button column : row) {
                 column.setDisable(true);
-                column.setStyle("-fx-background-color:  grey");
-
+                column.setStyle("-fx-background-color:#4d194d");
             }
         }
     }
@@ -548,7 +543,7 @@ public class SinglePlayerXOBoardBase extends GridPane {
         for (Button[] row : btns) {
             for (Button column : row) {
                 column.setDisable(false);
-                column.setStyle("-fx-background-color:  cornsilk");
+                column.setStyle("-fx-background-color:lightskyblue");
 
             }
         }
@@ -556,6 +551,7 @@ public class SinglePlayerXOBoardBase extends GridPane {
 
     private void Reset() {
         this.getChildren().remove(endGameText);
+        endGameText = null;
         SinglePlayerController.getInstance().reset();
         System.out.println("Reset function called");
         for (Button[] row : btns) {
@@ -592,13 +588,13 @@ public class SinglePlayerXOBoardBase extends GridPane {
     public void init(Stage primaryStage) {
         this.primaryStage = primaryStage;
         enableAllButtons();
-        Stop[] stops = new Stop[]{new Stop(0, Color.BLACK), new Stop(1, Color.RED)};
+        Stop[] stops = new Stop[]{new Stop(0, Color.PLUM), new Stop(1, Color.DARKMAGENTA)};
         LinearGradient lg1 = new LinearGradient(0, 0, 0, 0.5, true, CycleMethod.REFLECT, stops);
         for (Button[] row : btns) {
             for (Button column : row) {
                 column.setTextFill(lg1);
                 column.setFont(new Font("Forte", 90.0));
-                column.setStyle("-fx-background-color:  cornsilk");
+                column.setStyle("-fx-background-color:lightskyblue");
 
             }
         }

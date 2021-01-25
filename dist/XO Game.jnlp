@@ -13,6 +13,6 @@
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="XO Game" >
     <param name="requiredFXVersion" value="8.0+"/>
   </applet-desc>
-  <jfx:javafx-desc  width="800" height="600" main-class="xo.game.XOGame"  name="XO Game" />
+  <jfx:javafx-desc  width="800" height="600" main-class="xo.game.controller.XOGame"  name="XO Game" />
   <update check="always"/>
 </jnlp>
