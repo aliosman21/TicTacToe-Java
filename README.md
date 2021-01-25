@@ -64,7 +64,7 @@ This is a game play of the Mega smart single player the game is set to play on t
 </p>
 So I was actually planning to go for a draw but looks like i missed it :neutral_face:  
 
-But anyway you get the idea you can't win the AI not in a game with branching factor of 3
+But anyway you get the idea you can't win the AI not in a game with branching factor of 9
 
 ## Two Player
 
