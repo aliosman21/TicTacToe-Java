@@ -11,10 +11,10 @@ Place one has the fun times of linking here, but I can also link back [here](#pl
    <!-- Class Diagram-->
 - ### [GUI](#GUI) :dress:
 - ### [Game Modes](#Game-Modes) :soccer:
-  - ### [Single Player](##Single-Player) :raising_hand:
-  - ### [Two Player](##Two-Player) :raising_hand: :computer: :raising_hand:
-  - ### [LAN Games](##LAN) :smirk_cat: :computer: :computer: :smirk_cat:
-  - ### [Replays](##Replay) :repeat:
+  - ### [Single Player](#Single-Player) :raising_hand:
+  - ### [Two Player](#Two-Player) :raising_hand: :computer: :raising_hand:
+  - ### [LAN Games](#LAN) :smirk_cat: :computer: :computer: :smirk_cat:
+  - ### [Replays](#Replay) :repeat:
 - ### [Design Patterns](#Design-Patterns) :recycle: 
 - ### [MinMax Algorithm](#MinMax-Algorithm) :triangular_ruler:
 - ### [The Extra Mile](#The-Extra-Mile) :runner:
@@ -52,7 +52,7 @@ I know.. I kinda suck at editing :man_facepalming: so anyway. pretty self explan
 Now we can jump into a little bit of game play we will be discussing each game mode and first we have is.....
 
 ## Single Player
----
+
 For all the people that have no friends out there worry no more there is an AI algorithm that can make you lose every game you play against him isn't that sweet :cupid:  
 
 So the single player has two modes ***Dumb*** and ***Mega smart*** the Dumb one just chooses a random empty tile that it can play in while on the other hand the Mega smart chooses the best play it can play using the MinMax algorithm (we'll talk about that later on) to win or at the very least default the game to a draw  
@@ -67,7 +67,7 @@ So I was actually planning to go for a draw but looks like i missed it :neutral_
 But anyway you get the idea you can't win the AI not in a game with branching factor of 3
 
 ## Two Player
----
+
 Two player game mode allows a couple of people on the same machine to play a quality game of TicTacToe.. guess I will win this time won't I hehe :sunglasses:  
 
 <p align="center">
@@ -78,7 +78,7 @@ So the only thing we are missing in these gifs is the alert pop ups after every 
 
 
 ## LAN 
----
+
 Since I can't really capture the LAN game and show it in a good way let me explain the code for it  
 
 <p align="center">
@@ -107,7 +107,7 @@ The board blocks for the joiner and opens for the host to play with a thread lis
 ```
 
 ## Replay
----
+
 
 **Note that** if you don't have a database or the server is off it will block for a few seconds then resume I will add an audio describing the problem in the catch statement later  
 
