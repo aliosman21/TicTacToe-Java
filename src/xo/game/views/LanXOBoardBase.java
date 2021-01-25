@@ -672,6 +672,7 @@ public class LanXOBoardBase extends GridPane implements Runnable {
             flag = false;
             hostSocket.setSoTimeout(5000);
             this.primaryStage = primaryStage;
+            System.out.println("ACCEPTING");
             connectedSocket = hostSocket.accept();
             inStreamReader = new BufferedReader(new InputStreamReader(connectedSocket.getInputStream()));
             outStreamSender = new PrintStream(connectedSocket.getOutputStream());
