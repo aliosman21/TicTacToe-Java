@@ -149,7 +149,7 @@ The only thing that needed improvement was the actual architecture of the projec
 We separated classes that are categorically relevant into their own packages for use of readability 
 
 <p align="center">
-     <img src="./assets/packages.png" width="300" height="300" />
+     <img src="./assets/packages.PNG" width="300" height="300" />
 </p>
 
 - test: is just where I tested stuff and played around in the project
