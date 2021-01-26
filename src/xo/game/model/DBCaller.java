@@ -78,11 +78,6 @@ public class DBCaller {
             DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/xogames", "root", "Jrqr541&");
 
-        } catch (SQLException ex) {
-            System.out.println("error connecting to db in toDB fn in SinglePlayerController");
-        }
-
-        try {
             PreparedStatement pstmt = con.prepareStatement("INSERT INTO games(gameType) VALUE (?)");
             pstmt.setString(1, gameType);
             int rowsAffected = pstmt.executeUpdate();
@@ -120,7 +115,7 @@ public class DBCaller {
             // System.out.println("elmafrood kda closed");
         } catch (SQLException ex) {
             System.out.println("error in executing insert in toDB fn in SinglePlayerController 2 " + ex);
-            ex.printStackTrace();
+            // ex.printStackTrace();
         }
 
     }

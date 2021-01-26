@@ -369,7 +369,7 @@ public class LanXOBoardBase extends GridPane implements Runnable {
     private void Ending(Moves move) {
         Text text = new Text();
         endGameText = text;
-        text.setFont(new Font("forte", 135));
+        text.setFont(new Font("forte", 100));
         text.setFill(Color.WHITE);
         text.setStroke(Color.BLACK);
         text.setRotate(180);
@@ -392,7 +392,7 @@ public class LanXOBoardBase extends GridPane implements Runnable {
         switch (move.getFinalState()) {
             case 0:
                 final KeyFrame textAnimationDraw = new KeyFrame(Duration.seconds(0), e -> {
-                    text.setText("Draw");
+                    text.setText("It's a Draw");
 
                     SequentialTransition sequentialTransition = new SequentialTransition(text, translateEndText(text), rotateEndText(text));
                     sequentialTransition.play();
@@ -483,7 +483,7 @@ public class LanXOBoardBase extends GridPane implements Runnable {
         translateTransition.setDuration(Duration.seconds(0.5));
         translateTransition.setNode(text);
         translateTransition.setByY(220);
-        translateTransition.setByX(70);
+        translateTransition.setByX(40);
         translateTransition.setCycleCount(1);
         translateTransition.setAutoReverse(true);
 

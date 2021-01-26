@@ -392,7 +392,7 @@ public class TwoPlayerXOBoardBase extends GridPane {
         switch (move.getFinalState()) {
             case 0:
                 final KeyFrame textAnimationDraw = new KeyFrame(Duration.seconds(0), e -> {
-                    text.setText("You Both Suck");
+                    text.setText("It's a Draw");
 
                     SequentialTransition sequentialTransition = new SequentialTransition(text, translateEndText(text), rotateEndText(text));
                     sequentialTransition.play();
@@ -483,7 +483,7 @@ public class TwoPlayerXOBoardBase extends GridPane {
         translateTransition.setDuration(Duration.seconds(0.5));
         translateTransition.setNode(text);
         translateTransition.setByY(220);
-        translateTransition.setByX(70);
+        translateTransition.setByX(30);
         translateTransition.setCycleCount(1);
         translateTransition.setAutoReverse(true);
 

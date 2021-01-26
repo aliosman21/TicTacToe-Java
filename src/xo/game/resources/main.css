@@ -8,7 +8,7 @@ and open the template in the editor.
     Author     : raghda
 */
 .bodybg{
-   -fx-background-image: url("backgroundTicTacToeGif.gif");
+   -fx-background-image: url("tac.gif");
     -fx-background-size: 500px;
    -fx-background-position: 100 20 ;
    -fx-background-color:linear-gradient(darkviolet,pink);

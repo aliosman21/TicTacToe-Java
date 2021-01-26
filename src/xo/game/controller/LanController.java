@@ -7,7 +7,6 @@ package xo.game.controller;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.io.IOException;
-import static java.lang.Integer.max;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -16,10 +15,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.nio.charset.StandardCharsets;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import xo.game.model.DBCaller;
